@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -141,6 +142,7 @@
         opacity: 0;
         transform: translateY(-10px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -167,6 +169,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="container">
     <h1>🚀 axios-file-export</h1>
@@ -219,21 +222,37 @@
         <div class="result-content" id="result4-content"></div>
       </div>
     </div>
+
+    <!-- 示例5: 用户指定扩展名 (v1.1.0新功能) -->
+    <div class="example-section">
+      <h2>示例5: 用户指定扩展名 ✨ <code style="background: #667eea; color: white; padding: 3px 8px;">v1.1.0</code></h2>
+      <p>🎯 <strong>新功能</strong>: 当您提供带扩展名的文件名时，插件将直接使用该扩展名，不进行文件类型检测。这样可以避免因API返回的Content-Type不准确而导致的扩展名错误。</p>
+      <div class="input-group">
+        <label for="filenameWithExt">文件名（含扩展名）:</label>
+        <input type="text" id="filenameWithExt" placeholder="report.pdf" value="my-report.pdf">
+      </div>
+      <p style="font-size: 13px; color: #888; margin-top: -10px;">💡 提示: 插件会直接使用 <code>.pdf</code> 扩展名，不会检测文件类型</p>
+      <button onclick="example5()">下载（使用指定扩展名）</button>
+      <div id="result5" class="result">
+        <div class="result-title">结果:</div>
+        <div class="result-content" id="result5-content"></div>
+      </div>
+    </div>
   </div>
 
   <!-- 引入axios -->
   <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
-  
+
   <!-- 引入我们的库（开发环境中，需要先构建或使用模块加载器） -->
   <script type="module">
     // 注意: 在实际使用中，您需要导入构建后的文件或使用打包工具
     // 这里是演示代码结构
-    
+
     // 由于这是示例HTML，我们模拟exportFile函数
     // 在实际项目中，您应该这样导入: import { exportFile } from 'axios-file-export';
-    
+
     // 为了演示，我们使用公共API
-    window.example1 = async function() {
+    window.example1 = async function () {
       showLoading('result1');
       try {
         // 使用公共PDF示例
@@ -242,11 +261,11 @@
           method: 'GET',
           responseType: 'blob'
         });
-        
+
         const blob = new Blob([response.data], { type: 'application/pdf' });
         const timestamp = formatTimestamp();
         const filename = `${timestamp}.pdf`;
-        
+
         downloadBlob(blob, filename);
         showResult('result1', `文件下载成功: ${filename}`, false);
       } catch (error) {
@@ -254,7 +273,7 @@
       }
     };
 
-    window.example2 = async function() {
+    window.example2 = async function () {
       const customName = document.getElementById('customFilename').value || 'my-document';
       showLoading('result2');
       try {
@@ -263,10 +282,10 @@
           method: 'GET',
           responseType: 'blob'
         });
-        
+
         const blob = new Blob([response.data], { type: 'application/pdf' });
         const filename = `${customName}.pdf`;
-        
+
         downloadBlob(blob, filename);
         showResult('result2', `文件下载成功: ${filename}`, false);
       } catch (error) {
@@ -274,7 +293,7 @@
       }
     };
 
-    window.example3 = async function() {
+    window.example3 = async function () {
       showLoading('result3');
       try {
         // 模拟下载Excel（使用公共API返回JSON，转换为blob演示）
@@ -283,13 +302,13 @@
           method: 'GET',
           params: { _limit: 10 }
         });
-        
+
         // 将JSON转换为CSV格式（简化示例）
         const csv = jsonToCSV(response.data);
         const blob = new Blob([csv], { type: 'text/csv' });
         const timestamp = formatTimestamp();
         const filename = `report_${timestamp}.csv`;
-        
+
         downloadBlob(blob, filename);
         showResult('result3', `报表下载成功: ${filename}`, false);
       } catch (error) {
@@ -297,7 +316,7 @@
       }
     };
 
-    window.example4 = async function() {
+    window.example4 = async function () {
       showLoading('result4');
       try {
         const response = await axios({
@@ -305,15 +324,56 @@
           method: 'GET',
           responseType: 'blob'
         });
-        
+
         const blob = new Blob([response.data], { type: 'image/jpeg' });
         const timestamp = formatTimestamp();
         const filename = `image_${timestamp}.jpg`;
-        
+
         downloadBlob(blob, filename);
         showResult('result4', `图片下载成功: ${filename}`, false);
       } catch (error) {
         showResult('result4', `下载失败: ${error.message}`, true);
+      }
+    };
+
+    // ✨ v1.1.0 新功能示例
+    window.example5 = async function () {
+      const filenameWithExt = document.getElementById('filenameWithExt').value || 'my-report.pdf';
+      showLoading('result5');
+      try {
+        const response = await axios({
+          url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+          method: 'GET',
+          responseType: 'blob'
+        });
+
+        // 检查用户是否提供了扩展名
+        const hasExtension = /\.[a-zA-Z0-9]+$/.test(filenameWithExt);
+        let finalFilename;
+
+        if (hasExtension) {
+          // 用户提供了扩展名，直接使用（v1.1.0新功能）
+          const timestamp = formatTimestamp();
+          const lastDotIndex = filenameWithExt.lastIndexOf('.');
+          const nameWithoutExt = filenameWithExt.substring(0, lastDotIndex);
+          const ext = filenameWithExt.substring(lastDotIndex);
+          finalFilename = `${nameWithoutExt}_${timestamp}${ext}`;
+        } else {
+          // 没有扩展名，自动添加
+          const timestamp = formatTimestamp();
+          finalFilename = `${filenameWithExt}_${timestamp}.pdf`;
+        }
+
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        downloadBlob(blob, finalFilename);
+
+        const message = hasExtension
+          ? `✅ 文件下载成功: ${finalFilename}<br>🎯 使用了您指定的扩展名，未进行文件类型检测`
+          : `✅ 文件下载成功: ${finalFilename}<br>⚠️ 未提供扩展名，自动添加了 .pdf`;
+
+        showResult('result5', message, false);
+      } catch (error) {
+        showResult('result5', `下载失败: ${error.message}`, true);
       }
     };
 
@@ -344,19 +404,19 @@
     function showResult(id, message, isError) {
       const resultDiv = document.getElementById(id);
       const contentDiv = document.getElementById(`${id}-content`);
-      
+
       resultDiv.className = 'result show';
       if (isError) {
         resultDiv.classList.add('error');
       }
-      
-      contentDiv.textContent = message;
+
+      contentDiv.innerHTML = message;
     }
 
     function showLoading(id) {
       const resultDiv = document.getElementById(id);
       const contentDiv = document.getElementById(`${id}-content`);
-      
+
       resultDiv.className = 'result show';
       resultDiv.classList.remove('error');
       contentDiv.textContent = '正在下载...';
@@ -364,19 +424,20 @@
 
     function jsonToCSV(jsonArray) {
       if (!jsonArray || jsonArray.length === 0) return '';
-      
+
       const headers = Object.keys(jsonArray[0]);
       const csvHeaders = headers.join(',');
-      
-      const csvRows = jsonArray.map(obj => 
+
+      const csvRows = jsonArray.map(obj =>
         headers.map(header => {
           const value = obj[header];
           return typeof value === 'string' ? `"${value}"` : value;
         }).join(',')
       );
-      
+
       return [csvHeaders, ...csvRows].join('\n');
     }
   </script>
 </body>
+
 </html>
