@@ -1,5 +1,9 @@
 # axios-file-export
 
+[![npm version](https://img.shields.io/npm/v/axios-file-export.svg)](https://www.npmjs.com/package/axios-file-export)
+[![npm downloads](https://img.shields.io/npm/dm/axios-file-export.svg)](https://www.npmjs.com/package/axios-file-export)
+[![license](https://img.shields.io/npm/l/axios-file-export.svg)](https://github.com/zhangyanyange/export-file/blob/main/LICENSE)
+
 一个基于axios的轻量级文件导出工具，支持自动检测文件类型、时间戳命名和自定义文件名，兼容所有文件格式。
 
 ## 特性
@@ -14,6 +18,8 @@
 
 ## 安装
 
+### 从npm安装（推荐）
+
 ```bash
 npm install axios-file-export
 ```
@@ -22,6 +28,12 @@ npm install axios-file-export
 
 ```bash
 yarn add axios-file-export
+```
+
+### 从GitHub安装
+
+```bash
+npm install https://github.com/zhangyanyange/export-file.git
 ```
 
 ## 快速开始
