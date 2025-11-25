@@ -148,6 +148,32 @@ async function example6() {
 }
 
 /**
+ * 示例7: 用户指定扩展名 (v1.1.0新功能) ✨
+ */
+async function example7() {
+    console.log('✨ 示例7: 用户指定扩展名 (v1.1.0新功能)');
+    console.log('-------------------------------------------');
+    console.log('💡 当您提供带扩展名的文件名时，插件将直接使用该扩展名');
+    console.log('   不进行文件类型检测，避免因Content-Type不准确导致的问题');
+    console.log('');
+
+    const result = await exportFile('https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf', {
+        filename: 'my-report.pdf',  // 直接指定.pdf扩展名
+        useTimestamp: true
+    });
+
+    if (result.success) {
+        console.log('✅ 成功:', result.message);
+        console.log('   文件名:', result.filename);
+        console.log('   保存路径:', result.filepath);
+        console.log('   🎯 插件直接使用了您指定的.pdf扩展名');
+    } else {
+        console.log('❌ 失败:', result.message);
+    }
+    console.log('');
+}
+
+/**
  * 运行所有示例
  */
 async function runAllExamples() {
@@ -170,6 +196,9 @@ async function runAllExamples() {
         await new Promise(resolve => setTimeout(resolve, 500));
 
         await example6();
+        await new Promise(resolve => setTimeout(resolve, 500));
+
+        await example7();
 
         console.log('════════════════════════════════════════════');
         console.log('✨ 所有示例运行完成！');
