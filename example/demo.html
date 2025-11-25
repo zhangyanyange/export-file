@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>axios-file-export 浏览器示例</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 800px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 16px;
+    }
+
+    .example-section {
+      background: #f8f9fa;
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+      border-left: 4px solid #667eea;
+    }
+
+    .example-section h2 {
+      color: #667eea;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
+
+    .example-section p {
+      color: #555;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      color: #555;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 10px 15px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: border-color 0.3s;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    button {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .result {
+      background: #e8f5e9;
+      border-left: 4px solid #4caf50;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 15px;
+      display: none;
+    }
+
+    .result.error {
+      background: #ffebee;
+      border-left-color: #f44336;
+    }
+
+    .result.show {
+      display: block;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .result-title {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
+    }
+
+    .result-content {
+      color: #555;
+      font-size: 14px;
+    }
+
+    code {
+      background: #f5f5f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 axios-file-export</h1>
+    <p class="subtitle">浏览器环境使用示例</p>
+
+    <!-- 示例1: 使用时间戳命名 -->
+    <div class="example-section">
+      <h2>示例1: 使用时间戳命名下载PDF</h2>
+      <p>点击按钮下载示例PDF文件，文件名将使用时间戳自动生成。</p>
+      <button onclick="example1()">下载PDF (时间戳命名)</button>
+      <div id="result1" class="result">
+        <div class="result-title">结果:</div>
+        <div class="result-content" id="result1-content"></div>
+      </div>
+    </div>
+
+    <!-- 示例2: 自定义文件名 -->
+    <div class="example-section">
+      <h2>示例2: 自定义文件名</h2>
+      <p>指定自定义文件名，扩展名将根据文件类型自动添加。</p>
+      <div class="input-group">
+        <label for="customFilename">文件名:</label>
+        <input type="text" id="customFilename" placeholder="my-document" value="my-document">
+      </div>
+      <button onclick="example2()">下载并使用自定义文件名</button>
+      <div id="result2" class="result">
+        <div class="result-title">结果:</div>
+        <div class="result-content" id="result2-content"></div>
+      </div>
+    </div>
+
+    <!-- 示例3: 带参数的GET请求 -->
+    <div class="example-section">
+      <h2>示例3: 带参数的GET请求</h2>
+      <p>通过URL参数请求特定格式的报表。</p>
+      <button onclick="example3()">下载Excel报表</button>
+      <div id="result3" class="result">
+        <div class="result-title">结果:</div>
+        <div class="result-content" id="result3-content"></div>
+      </div>
+    </div>
+
+    <!-- 示例4: 下载图片 -->
+    <div class="example-section">
+      <h2>示例4: 下载图片</h2>
+      <p>下载图片文件，自动检测图片格式。</p>
+      <button onclick="example4()">下载示例图片</button>
+      <div id="result4" class="result">
+        <div class="result-title">结果:</div>
+        <div class="result-content" id="result4-content"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 引入axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+  
+  <!-- 引入我们的库（开发环境中，需要先构建或使用模块加载器） -->
+  <script type="module">
+    // 注意: 在实际使用中，您需要导入构建后的文件或使用打包工具
+    // 这里是演示代码结构
+    
+    // 由于这是示例HTML，我们模拟exportFile函数
+    // 在实际项目中，您应该这样导入: import { exportFile } from 'axios-file-export';
+    
+    // 为了演示，我们使用公共API
+    window.example1 = async function() {
+      showLoading('result1');
+      try {
+        // 使用公共PDF示例
+        const response = await axios({
+          url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+          method: 'GET',
+          responseType: 'blob'
+        });
+        
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const timestamp = formatTimestamp();
+        const filename = `${timestamp}.pdf`;
+        
+        downloadBlob(blob, filename);
+        showResult('result1', `文件下载成功: ${filename}`, false);
+      } catch (error) {
+        showResult('result1', `下载失败: ${error.message}`, true);
+      }
+    };
+
+    window.example2 = async function() {
+      const customName = document.getElementById('customFilename').value || 'my-document';
+      showLoading('result2');
+      try {
+        const response = await axios({
+          url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf',
+          method: 'GET',
+          responseType: 'blob'
+        });
+        
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const filename = `${customName}.pdf`;
+        
+        downloadBlob(blob, filename);
+        showResult('result2', `文件下载成功: ${filename}`, false);
+      } catch (error) {
+        showResult('result2', `下载失败: ${error.message}`, true);
+      }
+    };
+
+    window.example3 = async function() {
+      showLoading('result3');
+      try {
+        // 模拟下载Excel（使用公共API返回JSON，转换为blob演示）
+        const response = await axios({
+          url: 'https://jsonplaceholder.typicode.com/posts',
+          method: 'GET',
+          params: { _limit: 10 }
+        });
+        
+        // 将JSON转换为CSV格式（简化示例）
+        const csv = jsonToCSV(response.data);
+        const blob = new Blob([csv], { type: 'text/csv' });
+        const timestamp = formatTimestamp();
+        const filename = `report_${timestamp}.csv`;
+        
+        downloadBlob(blob, filename);
+        showResult('result3', `报表下载成功: ${filename}`, false);
+      } catch (error) {
+        showResult('result3', `下载失败: ${error.message}`, true);
+      }
+    };
+
+    window.example4 = async function() {
+      showLoading('result4');
+      try {
+        const response = await axios({
+          url: 'https://picsum.photos/800/600',
+          method: 'GET',
+          responseType: 'blob'
+        });
+        
+        const blob = new Blob([response.data], { type: 'image/jpeg' });
+        const timestamp = formatTimestamp();
+        const filename = `image_${timestamp}.jpg`;
+        
+        downloadBlob(blob, filename);
+        showResult('result4', `图片下载成功: ${filename}`, false);
+      } catch (error) {
+        showResult('result4', `下载失败: ${error.message}`, true);
+      }
+    };
+
+    // 辅助函数
+    function formatTimestamp() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const seconds = String(now.getSeconds()).padStart(2, '0');
+      return `${year}${month}${day}_${hours}${minutes}${seconds}`;
+    }
+
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    function showResult(id, message, isError) {
+      const resultDiv = document.getElementById(id);
+      const contentDiv = document.getElementById(`${id}-content`);
+      
+      resultDiv.className = 'result show';
+      if (isError) {
+        resultDiv.classList.add('error');
+      }
+      
+      contentDiv.textContent = message;
+    }
+
+    function showLoading(id) {
+      const resultDiv = document.getElementById(id);
+      const contentDiv = document.getElementById(`${id}-content`);
+      
+      resultDiv.className = 'result show';
+      resultDiv.classList.remove('error');
+      contentDiv.textContent = '正在下载...';
+    }
+
+    function jsonToCSV(jsonArray) {
+      if (!jsonArray || jsonArray.length === 0) return '';
+      
+      const headers = Object.keys(jsonArray[0]);
+      const csvHeaders = headers.join(',');
+      
+      const csvRows = jsonArray.map(obj => 
+        headers.map(header => {
+          const value = obj[header];
+          return typeof value === 'string' ? `"${value}"` : value;
+        }).join(',')
+      );
+      
+      return [csvHeaders, ...csvRows].join('\n');
+    }
+  </script>
+</body>
+</html>
