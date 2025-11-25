@@ -1,14 +1,3 @@
-{
-    "name": "axios-file-export",
-    "version": "1.0.0",
-    "type": "module",
-    "description": "一个基于axios的文件导出工具，支持自动检测文件类型、时间戳命名和自定义文件名，兼容所有文件格式",
-    "main": "src/index.js",
-    "types": "src/index.d.ts",
-    "module": "src/index.js",
-    "exports": {
-        ".": {
-            "import": "./src/index.js",
             "require": "./src/index.js",
             "types": "./src/index.d.ts"
         }
@@ -29,7 +18,8 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "axios": "^1.6.0"
+        "axios": ">=0.21.0",
+        "axios-file-export": "^1.0.0"
     },
     "peerDependencies": {
         "axios": ">=0.21.0"

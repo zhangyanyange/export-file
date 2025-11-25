@@ -1,88 +1,57 @@
 # 更新日志
 
-本文档记录了 axios-file-export 的所有重要变更。
+## [1.1.0] - 2025-11-25
 
-格式基于 [Keep a Changelog](https://keepachangelog.com/zh-CN/1.0.0/)，
-并且本项目遵循 [语义化版本](https://semver.org/lang/zh-CN/)。
+### ✨ 新增功能
+- **文件头检测**：添加通过文件头（magic number）检测文件类型的功能
+  - 支持识别：PDF、XLSX、PNG、JPG、GIF等格式
+  - 当API返回的Content-Type不明确时自动启用
+  
+### 🔧 优化改进
+- **用户扩展名优先**：如果用户提供的文件名已包含扩展名，则直接使用，不进行文件类型检测
+  - 示例：`filename: "report.pdf"` 将直接使用`.pdf`扩展名
+  - 避免因检测失败导致的扩展名错误
+  
+- **智能文件类型识别**：
+  - 优先使用Content-Type头
+  - Content-Type不明确时使用文件头检测
+  - 用户提供扩展名时跳过检测
+
+### 📝 文档更新
+- 更新README说明文件名参数可以包含扩展名
+- 添加文件头检测功能说明
+
+---
 
 ## [1.0.0] - 2025-11-25
 
 ### 🎉 首次发布
 
-#### ✨ 新增功能
+#### ✨ 核心功能
+- **自动文件类型检测**：根据Content-Type自动识别文件类型
+- **时间戳命名**：支持自定义时间戳格式（默认：YYYYMMDD_HHmmss）
+- **自定义文件名**：允许用户指定文件名
+- **环境适配**：自动识别浏览器和Node.js环境
+- **灵活配置**：支持GET/POST请求、自定义请求头、请求参数等
 
-- **核心功能**
-  - 基于axios的HTTP文件下载
-  - 自动检测文件类型（支持40+种MIME类型）
-  - 从响应头提取文件名
-  - 灵活的文件命名策略（时间戳/自定义）
-  - 自定义时间戳格式支持
-  - 自动添加文件扩展名
+#### 📦 支持的文件类型
+- 文档：PDF、Word、Excel、PowerPoint
+- 图片：JPG、PNG、GIF、BMP、WebP、SVG
+- 压缩：ZIP、RAR、7Z、TAR、GZ
+- 音视频：MP3、MP4、AVI、MOV
+- 文本：TXT、HTML、CSS、JS、JSON、XML、CSV
 
-- **环境支持**
-  - 浏览器环境：使用Blob和下载链接
-  - Node.js环境：保存到downloads目录
-  - 自动环境检测
+#### 🌐 环境支持
+- **浏览器**：使用Blob和URL.createObjectURL实现下载
+- **Node.js**：保存文件到downloads目录
 
-- **请求配置**
-  - 支持GET/POST/PUT/DELETE等所有HTTP方法
-  - URL查询参数支持
-  - 请求体数据支持
-  - 自定义请求头
-  - 完整的axios配置透传
+#### 📚 文档
+- 完整的README文档
+- TypeScript类型定义
+- 使用示例（浏览器和Node.js）
+- API文档
 
-- **类型支持**
-  - TypeScript类型定义
-  - JSDoc文档注释
-  - 完整的接口定义
-
-#### 📝 文档
-
-- 详细的README使用文档
-- TypeScript类型定义文件
-- 浏览器和Node.js使用示例
-- 安装指南（INSTALL.md）
-- 发布指南（PUBLISH.md）
-- MIT开源许可证
-
-#### 📦 支持的文件格式
-
-- **文档**: PDF, Word (doc/docx), Excel (xls/xlsx), PowerPoint (ppt/pptx)
-- **压缩**: ZIP, RAR, 7Z, GZIP, TAR
-- **图片**: JPEG, PNG, GIF, BMP, WebP, SVG, TIFF
-- **文本**: TXT, HTML, CSS, JavaScript, JSON, XML, CSV
-- **音视频**: MP3, WAV, MP4, MPEG, MOV, AVI
-
-#### 🧪 测试
-
-- 6个实际场景的使用示例
-- Node.js环境测试通过
-- 浏览器交互式演示页面
-
-#### 🌐 发布平台
-
-- ✅ npm公共注册表
-- ✅ GitHub开源仓库
-
----
-
-## 链接
-
-- [npm包](https://www.npmjs.com/package/axios-file-export)
-- [GitHub仓库](https://github.com/zhangyanyange/export-file)
-- [问题反馈](https://github.com/zhangyanyange/export-file/issues)
-
----
-
-**图例**
-- 🎉 首次发布 / 重大里程碑
-- ✨ 新增功能
-- 🐛 Bug修复
-- 📝 文档更新
-- 🔧 配置/构建变更
-- ⚡ 性能优化
-- 🎨 代码格式/结构改进
-- ♻️ 代码重构
-- 🔒 安全修复
-- ⚠️ 废弃功能
-- 🗑️ 移除功能
+#### 🔧 开发工具
+- ES模块支持
+- CommonJS兼容
+- MIT开源协议
