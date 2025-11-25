@@ -31,51 +31,18 @@
     "dependencies": {
         "axios": "^1.6.0"
     },
-    {
-        "name": "axios-file-export",
-        "version": "1.0.0",
-        "type": "module",
-        "description": "一个基于axios的文件导出工具，支持自动检测文件类型、时间戳命名和自定义文件名，兼容所有文件格式",
-        "main": "src/index.js",
-        "types": "src/index.d.ts",
-        "module": "src/index.js",
-        "exports": {
-            ".": {
-                "import": "./src/index.js",
-                "require": "./src/index.js",
-                "types": "./src/index.d.ts"
-            }
-        },
-        "scripts": {
-            "test": "node example/demo.js"
-        },
-        "keywords": [
-            "axios",
-            "file",
-            "export",
-            "download",
-            "file-download",
-            "file-export",
-            "blob",
-            "typescript"
-        ],
-        "author": "",
-        "license": "MIT",
-        "dependencies": {
-            "axios": "^1.6.0"
-        },
-        "peerDependencies": {
-            "axios": ">=0.21.0"
-        },
-        "engines": {
-            "node": ">=12.0.0"
-        },
-        "repository": {
-            "type": "git",
-            "url": "https://github.com/zhangyanyange/export-file.git"
-        },
-        "bugs": {
-            "url": "https://github.com/zhangyanyange/export-file/issues"
-        },
-        "homepage": "https://github.com/zhangyanyange/export-file#readme"
-    }
+    "peerDependencies": {
+        "axios": ">=0.21.0"
+    },
+    "engines": {
+        "node": ">=12.0.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/zhangyanyange/export-file.git"
+    },
+    "bugs": {
+        "url": "https://github.com/zhangyanyange/export-file/issues"
+    },
+    "homepage": "https://github.com/zhangyanyange/export-file#readme"
+}
